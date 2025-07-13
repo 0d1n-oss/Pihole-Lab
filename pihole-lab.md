@@ -1,15 +1,15 @@
 # Pihole_lab
 
 ### ¿Qué hace Pi-hole?
-### En lugar de que los dispositivos en tu red consulten directamente servidores DNS como Google (8.8.8.8) o Cloudflare (1.1.1.1), las solicitudes DNS pasan primero por Pi-hole.
-### Si la solicitud es hacia un dominio conocido por contener publicidad o malware, Pi-hole la bloquea.
-### Si es legítima, resuelve normalmente (consulta un servidor DNS externo como 1.1.1.1 o 9.9.9.9).
+-    ### En lugar de que los dispositivos en tu red consulten directamente servidores DNS como Google (8.8.8.8) o Cloudflare (1.1.1.1), las solicitudes DNS pasan primero por Pi-hole.
+-    ### Si la solicitud es hacia un dominio conocido por contener publicidad o malware, Pi-hole la bloquea.
+-    ### Si es legítima, resuelve normalmente (consulta un servidor DNS externo como 1.1.1.1 o 9.9.9.9).
 
 ### Ventajas
-### Ligero (corre en Raspberry Pi, contenedor Docker, etc.)
-### Protege todos los dispositivos de la red
-### Tiene estadísticas y gráficos útiles
-### Completamente gratuito y de código abierto
+-    ### Ligero (corre en Raspberry Pi, contenedor Docker, etc.)
+-    ### Protege todos los dispositivos de la red
+-    ### Tiene estadísticas y gráficos útiles
+-    ### Completamente gratuito y de código abierto
 
 
 # Instalacion
@@ -19,17 +19,17 @@
 ## Creacion de la red.
 ### Se desplego una red interna en docker, aclarando el apartado bridge para tener acceso a internet, y, creando un nuevo rango de ip para las maquinas.
 
-::: codebox
+```bash
     #new network
     docker network create \
       --driver=bridge \
       --subnet=172.30.0.0/16 \
       pi-net
-:::
+```
 
 ## Pi-hole.
 
-::: codebox
+```bash
     docker run -d \
       --name pihole \
       --net pi-net \
@@ -45,29 +45,29 @@
       --cap-add=NET_ADMIN \
       --restart=unless-stopped \
       pihole/pihole:latest
-:::
+```
 
 ## kali.
 
-::: codebox
+```bash
     docker run -d \
       --name kali_machine \
       --network pi-net \
       kalilinux/kali-rolling \
       /bin/bash
-:::
+```
 
 # Bloqueo de un dominio.
-###El laboratorio consiste en usar pihole como dns de kali, para interceptar y manipular las peticiones hechas desde el contenedor de kali.
+### El laboratorio consiste en usar pihole como dns de kali, para interceptar y manipular las peticiones hechas desde el contenedor de kali.
 
 ![](images/3-1.png)
 
-###Luego de desplegar los contenedores se accede a la interfaz de pihole desde el navegador para administrar todo.
-###(En caso de fallar la clave de acceso se puede usar el comando docker exec -it pihole /bin/bash -c "pihole -a -p\" desde la terminal para setear una nueva clave.)
+### Luego de desplegar los contenedores se accede a la interfaz de pihole desde el navegador para administrar todo.
+### (En caso de fallar la clave de acceso se puede usar el comando docker exec -it pihole /bin/bash -c "pihole -a -p\" desde la terminal para setear una nueva clave.)
 
-::: codebox
+```bash
     docker exec -it pihole /bin/bash -c ”pihole -a -p"
-:::
+```
 
 ![](images/3-2.png)
 
